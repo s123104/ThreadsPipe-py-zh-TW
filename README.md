@@ -1,23 +1,20 @@
-# ThreadsPipe-py
+# ThreadsPipe-py 使用指南
 
-ThreadsPipe-py 是一個基於 Python 語言的函式庫，旨在簡化與 Meta 官方 Threads API 的整合。透過此函式庫，開發者能夠輕鬆執行發文、回覆、引用、轉發以及查詢數據等操作，並提供自動處理超長文字、媒體上傳與 Hashtag 配置等實用功能。
+[![繁體中文](https://img.shields.io/badge/繁體中文-點擊查看-orange)](README.md)  
 
----
+這是一份針對 [paulosabayomi/ThreadsPipe-py](https://github.com/paulosabayomi/ThreadsPipe-py) 函式庫的完整繁體中文使用指南。ThreadsPipe-py 是一個 Python 函式庫，利用 Meta 官方 Threads API 進行用戶帳號操作，包括發文、回覆、引用、轉發、資料查詢及其他輔助功能。本文檔將介紹安裝、設定、快速上手、核心功能、CLI 工具、環境變數管理、開發與貢獻等詳盡內容。
 
-## 目錄
-
-- [專案介紹](#專案介紹)
-- [功能列表](#功能列表)
-- [安裝指南](#安裝指南)
+- [什麼是 ThreadsPipe-py？](#什麼是-threadspipe-py)
+- [安裝](#安裝)
 - [使用前準備](#使用前準備)
   - [取得 Facebook/Threads 授權](#取得-facebookthreads-授權)
   - [GitHub 媒體上傳設定](#github-媒體上傳設定)
 - [快速上手](#快速上手)
   - [初始化與授權流程](#初始化與授權流程)
-  - [發佈貼文與回覆](#發佈貼文與回覆)
-- [進階 API 功能](#進階-api-功能)
-  - [發文、引用、轉發](#發文引用轉發)
+- [核心功能](#核心功能)
+  - [發文與互動](#發文與互動)
   - [資料查詢與洞察](#資料查詢與洞察)
+  - [輔助工具](#輔助工具)
 - [CLI 命令行工具](#cli-命令行工具)
 - [環境變數與設定檔](#環境變數與設定檔)
 - [開發與貢獻](#開發與貢獻)
@@ -25,102 +22,84 @@ ThreadsPipe-py 是一個基於 Python 語言的函式庫，旨在簡化與 Meta 
 
 ---
 
-## 專案介紹
+## 什麼是 ThreadsPipe-py？
 
-ThreadsPipe-py 為開發者提供一套高階介面，使得與 Threads API 進行整合變得簡便。該函式庫解決了純手動調用官方 API 可能遇到的限制，例如文字超長問題、自動拆分串貼、上傳本地媒體檔案（結合 GitHub 作為暫存平台）以及 Hashtag 分配處理等。使用 ThreadsPipe-py，開發者可以更加專注於業務邏輯，而無需過多關注 API 接口細節。
-
----
-
-## 功能列表
-
-### 發文與互動
-- **發佈新貼文：** 支援純文字、附帶圖片或影片貼文。
-- **回覆貼文：** 透過指定 `reply_to_id` 進行貼文回覆。
-- **引用貼文：** 引用其他貼文並附加自定義評論，支援選擇性在多則串貼中持續引用。
-- **轉發貼文：** 方便地轉發原有貼文以擴大影響。
-- **自動拆分文字：** 當文字超出 Threads 平台上限時，自動拆分為多則串貼，同時處理 Hashtag 的分配。
-
-### 資料查詢
-- **查詢個人資訊：** 取得當前授權帳戶的個人資料。
-- **查詢貼文列表：** 取得使用者發佈的所有貼文，並支援日期篩選與數量限制。
-- **查詢單則貼文：** 根據貼文 ID 獲取詳細內容。
-- **查詢貼文回覆：** 檢索指定貼文下的回覆留言，可設定僅顯示第一層或全部回覆。
-
-### 互動洞察
-- **貼文互動數據：** 查詢貼文的瀏覽數、按讚數、回覆數、轉發數及引用數等數據。
-- **帳戶整體數據：** 獲取包含追蹤者統計、互動數據在內的整體帳戶洞察，並支援細分地域、年齡、性別等參數分析。
-
-### 輔助工具
-- **意圖連結生成：** 生成貼文意圖 URL（用於分享或網站嵌入）與追蹤意圖 URL，以便快速引導使用者操作。
-- **上傳本地媒體：** 結合 GitHub 儲存庫實現本地媒體檔案上傳，解決直接上傳限制。
+ThreadsPipe-py 提供開發者一套簡潔而高效的介面，用以整合 Meta 官方 Threads API。透過此函式庫，您可以方便地執行發文、回覆、引用、轉發，以及查詢用戶資訊和互動數據等操作，並且支援自動拆分超長貼文、附件批次上傳等功能。本文檔為繁體中文版本，內容來源與設計均參考原作者 [paulosabayomi/ThreadsPipe-py](https://github.com/paulosabayomi/ThreadsPipe-py) 的說明文件。
 
 ---
 
-## 安裝指南
+## 安裝
 
 ### 基本需求
-- **Python 版本：** 需 3.8 以上版本。
-- **Threads API 認證：** 需擁有 Facebook 開發者帳號並建立 Threads 應用。
+- **Python 版本：** Python 3.8 以上
+- **認證需求：** 需擁有 Facebook 開發者帳號並建立 Threads 應用
 
 ### 安裝步驟
-1. 使用 pip 安裝函式庫：
-   ```bash
-   pip install threadspipepy
-   ```
-2. 若需使用 CLI 工具，可執行：
-   ```bash
-   pip install threadspipepy[cli]
-   ```
+
+- 使用 pip 安裝 ThreadsPipe-py：
+  ```bash
+  pip install threadspipepy
+  ```
+- 若需使用 CLI 工具，則執行：
+  ```bash
+  pip install threadspipepy[cli]
+  ```
 
 ---
 
 ## 使用前準備
 
 ### 取得 Facebook/Threads 授權
+
 1. **建立 Threads 應用：**  
-   前往 [Facebook Developers](https://developers.facebook.com/) 建立專案，並依照說明取得 **App ID** 與 **App Secret**，同時申請相應 Threads 權限。
+   前往 [Facebook Developers](https://developers.facebook.com/apps) 建立一個專案，並取得 **App ID** 與 **App Secret**；依照官方文件 [設定 Threads Use Case](https://developers.facebook.com/docs/development/create-an-app/threads-use-case) 完成設定。
+
 2. **設定 Redirect URI：**  
-   在應用設定中填寫一個正確可用的 redirect URI，系統將在 OAuth 授權流程後返回授權碼（auth code）。
+   在應用設定中填入正確的 Redirect URI。當用戶完成授權後，系統將重定向至該 URI，並在 URL 中附加 `code` 參數，例如：  
+   `https://example.com/handler.php?code=Abcdef...#_`  
+   請在程式使用前剝除尾端的 `#_`。
 
 ### GitHub 媒體上傳設定
-為解決本地媒體檔案上傳問題，請準備以下資訊：
-- GitHub 帳號與相應儲存庫（用作檔案暫存）
-- GitHub 細粒度個人存取權杖（PAT）
-  
-若未配置上述資訊，調用上傳本地檔案功能時系統將會拋出錯誤。
+
+若需上傳本地媒體檔案，請準備以下資訊：
+- GitHub 帳號與專用儲存庫（用於臨時上傳）
+- GitHub 細粒度個人存取權杖（PAT）  
+**注意：** 若未正確配置，嘗試上傳本地檔案時將發生錯誤。
 
 ---
 
 ## 快速上手
 
 ### 初始化與授權流程
-首先，在程式中初始化 ThreadsPipe 物件：
+
+首先，在程式中引入函式庫並初始化 ThreadsPipe 物件：
 ```python
 from threadspipepy.threadspipe import ThreadsPipe
 
-# 建立 API 實例（授權相關參數稍後更新）
+# 初始化 API 物件（access_token 與 user_id 可暫留空，待授權後更新）
 api = ThreadsPipe(
-    access_token="",    # 待取得後更新
-    user_id="",         # 待取得後更新
+    access_token="",
+    user_id="",
     handle_hashtags=True,
     auto_handle_hashtags=False,
-    # 若需上傳本地檔案，請配置下列 GitHub 資訊：
+    # 若需上傳本地檔案，請設定以下 GitHub 資訊：
     # gh_bearer_token="YOUR_GITHUB_TOKEN",
     # gh_repo_name="YOUR_GITHUB_REPO",
     # gh_username="YOUR_GITHUB_USERNAME"
 )
 ```
 
-#### OAuth 授權步驟
-1. **取得授權碼：**
+#### OAuth 授權流程
+
+1. **取得授權碼（Authorization Code）：**
    ```python
    auth_code = api.get_auth_token(
-       app_id="YOUR_APP_ID",
-       redirect_uri="https://your.domain/handle",
-       scope="all"
+       app_id="YOUR_APP_ID",  # 從 Facebook 開發者儀表板獲取
+       redirect_uri="https://your.domain/handler",  # 請確保與設定中的相符
+       scope="all"  # 或傳入所需授權範圍列表
    )
    ```
-   系統會開啟瀏覽器提示您登入並同意授權，完成後從返回的 URL 擷取授權碼（注意移除 URL 尾部的多餘片段）。
+   執行後系統會自動開啟瀏覽器，引導用戶登入並授權。從 Redirect URI 擷取授權碼（記得剝除尾端的 `#_`）。
 
 2. **交換存取權杖：**
    ```python
@@ -128,12 +107,12 @@ api = ThreadsPipe(
        app_id="YOUR_APP_ID",
        app_secret="YOUR_APP_SECRET",
        auth_code=auth_code,
-       redirect_uri="https://your.domain/handle"
+       redirect_uri="https://your.domain/handler"
    )
    ```
-   該方法將返回短期與長期存取權杖，建議使用長期權杖（約 60 天有效期）。
+   此方法會返回包含短期（1 小時有效）與長期（60 天有效）權杖的資料，以及用戶的 `user_id`。建議使用長期權杖便於長期應用。
 
-3. **更新 API 實例：**
+3. **更新 API 物件：**
    ```python
    api.update_param(
        user_id=tokens["user_id"],
@@ -141,163 +120,178 @@ api = ThreadsPipe(
    )
    ```
 
-完成以上步驟後，您即可開始調用各項 API 功能。
+完成以上流程後，您便可調用 ThreadsPipe-py 進行各項操作。
 
 ---
 
-## 發佈貼文與回覆
+## 核心功能
 
-### 發佈純文字貼文
-```python
-api.pipe(post="Hello Threads! 這是我的第一則貼文。")
-```
+### 發文與互動
 
-### 發佈附帶圖片的貼文
-```python
-api.pipe(
-    post="分享一張精美照片。",
-    files=["./local/path/to/image.jpg"]
-)
-```
+- **發佈貼文**  
+  可發送純文字、圖片或影片貼文；當貼文文字超過 500 字或附件超過 20 個時，系統將自動拆分成串貼（類似 X 线程）。  
+  **範例：**
+  ```python
+  api.pipe(post="Hello Threads! 這是我的第一則貼文。")
+  ```
 
-### 發佈回覆貼文
-```python
-api.pipe(
-    post="這是一則回覆。",
-    reply_to_id="1234567890123456"  # 指定回覆目標貼文的 ID
-)
-```
+- **發佈回覆**
+  ```python
+  api.pipe(
+      post="這是一則回覆貼文。",
+      reply_to_id="1234567890123456"  # 指定要回覆的貼文 ID
+  )
+  ```
 
-### 發佈引用貼文
-```python
-api.pipe(
-    post="以下是我的看法：",
-    quote_post_id="1234567890123456"
-)
-```
+- **引用貼文**
+  ```python
+  api.pipe(
+      post="以下是我的評論：",
+      quote_post_id="1234567890123456"  # 指定要引用的貼文 ID
+  )
+  ```
 
-### 轉發貼文
-```python
-api.repost_post(post_id="1234567890123456")
-```
+- **轉發貼文**
+  ```python
+  api.repost_post(post_id="1234567890123456")
+  ```
 
----
-
-## 進階 API 功能
-
-### 發文、引用與轉發
-- **自動拆分超長文字：**  
-  若貼文超過 Threads 平台字數限制（約 500 字元），函式庫將自動將內容拆分為多則貼文，並合理分配 Hashtag。
-- **設定回覆權限：**  
-  發佈貼文時可指定 `who_can_reply` 參數（例如 `"everyone"` 或 `"accounts_you_follow"`），以控制回覆權限。
+- **自動拆分功能**  
+  當貼文內容超出限制時，系統會自動將超長文字或多個附件拆分為多則貼文，並合理分配 Hashtag。
 
 ### 資料查詢與洞察
-- **取得個人資訊：**
+
+- **查詢個人資訊**
   ```python
   profile = api.get_profile()
   print(profile)
   ```
-- **查詢貼文列表：**
+
+- **查詢貼文列表**
   ```python
   posts = api.get_posts(limit=10)
-  for p in posts:
-      print(p)
+  for post in posts:
+      print(post)
   ```
-- **取得單則貼文詳細資訊：**
+
+- **查詢單則貼文詳情**
   ```python
   post_detail = api.get_post(post_id="1234567890123456")
   print(post_detail)
   ```
-- **查詢貼文回覆：**
+
+- **查詢貼文回覆**
   ```python
   replies = api.get_post_replies(post_id="1234567890123456", top_levels=True)
   for reply in replies:
       print(reply)
   ```
-- **取得貼文互動數據：**
+
+- **取得貼文互動數據**
   ```python
   insights = api.get_post_insights(post_id="1234567890123456", metrics="all")
   print(insights)
   ```
-- **取得帳戶整體洞察：**
+
+- **取得帳戶整體洞察**
   ```python
   user_insights = api.get_user_insights(since_date="2025-01-01", until_date="2025-03-01")
   print(user_insights)
   ```
-- **生成貼文意圖 URL：**
+
+### 輔助工具
+
+- **生成貼文意圖 URL**  
+  可用於嵌入網站的分享按鈕，讓用戶一鍵前往 Threads 發文：
   ```python
   intent_url = api.get_post_intent(text="前往 Threads 發文", link="https://your.domain/somepage")
-  print("分享連結:", intent_url)
+  print("貼文意圖連結：", intent_url)
   ```
-- **生成追蹤意圖 URL：**
+
+- **生成追蹤意圖 URL**  
+  生成快捷追蹤用戶的 URL：
   ```python
   follow_url = api.get_follow_intent(username="your_threads_username")
-  print("追蹤連結:", follow_url)
+  print("追蹤意圖連結：", follow_url)
   ```
 
 ---
 
 ## CLI 命令行工具
 
-ThreadsPipe-py 附帶 CLI 工具，可在命令行環境下執行存取權杖交換、刷新等操作。
+ThreadsPipe-py 附帶 CLI 工具，使用者可在終端機中進行存取權杖管理等操作。
 
 ### 取得存取權杖
+
 ```bash
 threadspipepy access_token \
   --app_id=YOUR_APP_ID \
   --app_secret=YOUR_APP_SECRET \
   --auth_code="YOUR_AUTH_CODE" \
-  --redirect_uri="https://your.domain/handle" \
+  --redirect_uri="https://your.domain/handler" \
   --env_path="./.env" \
   --env_variable="THREADS_TOKEN"
 ```
-此指令將幫助您取得長期存取權杖，並儲存至指定的 `.env` 檔中。
+
+此指令將以授權碼換取短期與長期存取權杖，並可自動更新指定 `.env` 檔案內的環境變數。
 
 ### 刷新存取權杖
+
 ```bash
 threadspipepy refresh_token \
   --access_token="YOUR_CURRENT_LONG_LIVED_TOKEN" \
-  --app_id=YOUR_APP_ID \
-  --app_secret=YOUR_APP_SECRET
+  --env_path="./.env" \
+  --env_variable="THREADS_TOKEN"
 ```
-刷新成功後請確保將新權杖更新到您的環境變數檔中。
+
+若設定 `--auto_mode=true`，CLI 將自動使用 `.env` 檔案中指定的變數值進行更新。
 
 ### 查看 CLI 幫助
+
 ```bash
 threadspipepy -h
 ```
-此指令會顯示所有可用命令與選項。
+
+此指令會顯示所有可用的 CLI 命令與選項。
 
 ---
 
 ## 環境變數與設定檔
 
-為方便管理敏感資料（如 App Secret 與 Access Token），建議使用環境變數或 `.env` 檔案。  
-例如，在 Linux/Unix 環境下可設定環境變數：
+為了安全管理 App Secret 與 Access Token，建議使用環境變數或 `.env` 檔案。  
+例如，在 Linux/Unix 中設定環境變數：
 ```bash
 export THREADS_TOKEN="YOUR_LONG_LIVED_TOKEN"
 ```
-程式中讀取方式：
+在程式中可透過：
 ```python
 import os
 token = os.environ.get("THREADS_TOKEN")
 api.update_param(access_token=token)
 ```
-CLI 工具亦支援直接寫入 `.env` 檔案。
+CLI 工具同時支援自動更新 `.env` 檔案中指定變數。
 
 ---
 
 ## 開發與貢獻
 
-若您有意為本專案貢獻代碼，歡迎透過以下方式參與：
-- **原始碼儲存庫：** [GitHub Repository](https://github.com/paulosabayomi/ThreadsPipe-py)
-- **問題回報：** 請在 GitHub Issues 中提出建議或回報問題。
-- **Pull Requests：** 請參考專案的貢獻指南提交 PR。
+如果您有意參與本專案改進或提供建議，請參考下列資訊：
 
-我們期待各位開發者能夠共同維護與改進本函式庫。
+- **原始碼儲存庫：** [paulosabayomi/ThreadsPipe-py](https://github.com/paulosabayomi/ThreadsPipe-py)
+- **問題回報：** 請至 GitHub Issues 提出您的建議或報告問題
+- **Pull Requests：** 請按照原專案貢獻指南提交您的修改
+
+本使用指南僅為繁體中文翻譯版本，內容來源均參考原作者說明。請在使用時尊重原始授權與版權資訊。
 
 ---
 
 ## 授權條款
 
-ThreadsPipe-py 採用 **MIT 授權條款**，請參閱 [LICENSE](LICENSE) 文件以瞭解詳細權限與條件。使用本函式庫時，請確保依據授權條款妥善引用版權聲明。
+ThreadsPipe-py 採用 **MIT 授權條款**。詳細內容請參閱 [LICENSE](https://github.com/paulosabayomi/ThreadsPipe-py/blob/main/LICENSE)。  
+本繁體中文使用指南僅為翻譯與整理用途，原始專案內容請參考 [paulosabayomi/ThreadsPipe-py](https://github.com/paulosabayomi/ThreadsPipe-py)。
+
+---
+
+以上即為 ThreadsPipe-py 的完整繁體中文使用指南。希望本文件能協助您快速上手並有效整合 Threads API，同時感謝您對原作者工作的支持與尊重！
+
+Happy Coding!
